@@ -55,14 +55,12 @@
 		});
 	}
 
-    let totalDamage = 0;	
+    	let totalDamage = 0;	
 	function calculateTotalDamage2() {
 		let dmgs = [];
 		totalDamage = 0;
 		
-        const adaptedSettings = Object.fromEntries(
-            			Object.entries(settings).map(([key, value]) => [key, value.value])
-            		);
+        	const adaptedSettings = Object.fromEntries(Object.entries(settings).map(([key, value]) => [key, value.value]));
 		const settingsCopy = structuredClone(adaptedSettings);
 		
 		let tick = 0;  // TODO implement ticks properly
@@ -77,66 +75,63 @@
 		let finished = false;
 		//TODO allow non ability actions
 		//TODO change to ticks
-        abilityBar.forEach(abilityKey => {
+	        abilityBar.forEach(abilityKey => {
 			start_tick = tick;
-			console.log('Ability: {'+abilityKey+'} - Dracolich infusion: {' + settingsCopy['dracolich infusion'] +
-				'} - Split Soul: {' + settingsCopy['split soul'] + '} - Swiftness: {' + settingsCopy['death swiftness'] + '}'
-			);
-            if (abilityKey != null) {
-				settingsCopy['ability'] = abilityKey;
-				if (abilityKey in rangedAbils) {
-					let hit_tick = tick + hit_delay;
-					//Handle single-hit abilities
-					if (!damageTracker[hit_tick]) {
-							damageTracker[hit_tick] = []; 
-						}
-					if (rangedAbils[abilityKey].calc == hit_damage_calculation) {
-						let cast_damage_object = calc_on_cast(settingsCopy);
-						cast_damage_object['non_crit']['ability'] = abilityKey;
-						damageTracker[hit_tick].push(cast_damage_object);
-
-						if (abilityKey == 'crystal rain') {
-							handle_sgb(settingsCopy, cast_damage_object, damageTracker, hit_tick);
-						}
+				
+	            if (abilityKey != null) {
+			settingsCopy['ability'] = abilityKey;
+			if (abilityKey in rangedAbils) {
+				let hit_tick = tick + hit_delay;
+				//Handle single-hit abilities
+				if (!damageTracker[hit_tick]) {
+						damageTracker[hit_tick] = []; 
 					}
-					//Handle multi-hit abilities
-					else {
-                        console.log(abils[abilityKey]['ability classification']);
-                        if (abils[abilityKey]['ability classification'] == 'channel') {
-                            //TODO BODY
-                            //
-                        }
-						let cast_damage_object = rotation_ability_damage(settingsCopy);
-						let i = 0;
-						cast_damage_object.forEach(hitsplat_dist => {
-							hitsplat_dist['non_crit']['ability'] = abilityKey;
-							//handle hit delay properly by casting on the correct tick
-							let hit_tick_n = hit_tick + abils[abilityKey].hit_timings[i];
-							if (!damageTracker[hit_tick_n]) {
-								damageTracker[hit_tick_n] = []; 
-							}
-							damageTracker[hit_tick_n].push(hitsplat_dist);
-							i++;
-						});
-						if (abilityKey == 'rapid fire') {
-							handle_edraco(settingsCopy, timers);
-						}
+				if (rangedAbils[abilityKey].calc == hit_damage_calculation) {
+					let cast_damage_object = calc_on_cast(settingsCopy);
+					cast_damage_object['non_crit']['ability'] = abilityKey;
+					damageTracker[hit_tick].push(cast_damage_object);
+	
+					if (abilityKey == 'crystal rain') {
+						handle_sgb(settingsCopy, cast_damage_object, damageTracker, hit_tick);
 					}
 				}
-				if (abilityKey in ranged_buff_abilities) {
-					handle_ranged_buffs(settingsCopy, timers, abilityKey);
+				//Handle multi-hit abilities
+				else {
+					console.log(abils[abilityKey]['ability classification']);
+		                        if (abils[abilityKey]['ability classification'] == 'channel') {
+		                            //TODO BODY
+	                        	}
+					let cast_damage_object = rotation_ability_damage(settingsCopy);
+					let i = 0;
+					cast_damage_object.forEach(hitsplat_dist => {
+						hitsplat_dist['non_crit']['ability'] = abilityKey;
+						//handle hit delay properly by casting on the correct tick
+						let hit_tick_n = hit_tick + abils[abilityKey].hit_timings[i];
+						if (!damageTracker[hit_tick_n]) {
+							damageTracker[hit_tick_n] = []; 
+						}
+						damageTracker[hit_tick_n].push(hitsplat_dist);
+						i++;
+					});
+					if (abilityKey == 'rapid fire') {
+						handle_edraco(settingsCopy, timers);
+					}
 				}
-				let abil_duration = 3; //assume ability is 3t unless duration is explicitly specified
-				if (abils[abilityKey]['duration']) {
-					abil_duration = abils[abilityKey]['duration'] ;
-				}
-				//Process hitsplats and decrement timers 
-				for (let i = start_tick; i < start_tick + abil_duration; i++) {
-					if (Object.keys(timers).length > 0) {
-						for (let key in timers) {
-							timers[key] -= 1;
-							if (timers[key] < 0) {
-								settingsCopy[key] = false;
+			}
+			if (abilityKey in ranged_buff_abilities) {
+				handle_ranged_buffs(settingsCopy, timers, abilityKey);
+			}
+			let abil_duration = 3; //assume ability is 3t unless duration is explicitly specified
+			if (abils[abilityKey]['duration']) {
+				abil_duration = abils[abilityKey]['duration'] ;
+			}
+			//Process hitsplats and decrement timers 
+			for (let i = start_tick; i < start_tick + abil_duration; i++) {
+				if (Object.keys(timers).length > 0) {
+					for (let key in timers) {
+						timers[key] -= 1;
+						if (timers[key] < 0) {
+							settingsCopy[key] = false;
 							}
 						}
 					}
@@ -148,31 +143,29 @@
 						console.log('Tick: (' + i + ') --- Total Damage: ' + dmgs.reduce((acc, current) => acc + current, 0));
 					}
 					tick += 1;
-				}
-				end_tick = tick;
-            }
+			}
+			end_tick = tick;
+            	}
         });
-		//TODO remove this dogshit code and handle better 
-		for (let i = end_tick; i < end_tick + 10; i++) {
-					if (Object.keys(timers).length > 0) {
-						for (let key in timers) {
-							timers[key] -= 1;
-							if (timers[key] < 0) {
-								settingsCopy[key] = false;
-							}
-						}
-					}
-					if (damageTracker[i]) {
-						damageTracker[i].forEach(namedDmgObject => {
-							settingsCopy['ability'] = namedDmgObject['non_crit']['ability'];
-							dmgs.push(rotation_on_npc(settingsCopy, namedDmgObject));
-						});
-						console.log('Tick: (' + i + ') --- Total Damage: ' + dmgs.reduce((acc, current) => acc + current, 0));
-					}
-					tick += 1;
+	//TODO remove this dogshit code and handle better 
+	for (let i = end_tick; i < end_tick + 10; i++) {
+		if (Object.keys(timers).length > 0) {
+			for (let key in timers) {
+				timers[key] -= 1;
+				if (timers[key] < 0) {
+					settingsCopy[key] = false;
 				}
-		
-		
+			}
+		}
+		if (damageTracker[i]) {
+			damageTracker[i].forEach(namedDmgObject => {
+				settingsCopy['ability'] = namedDmgObject['non_crit']['ability'];
+				dmgs.push(rotation_on_npc(settingsCopy, namedDmgObject));
+			});
+			console.log('Tick: (' + i + ') --- Total Damage: ' + dmgs.reduce((acc, current) => acc + current, 0));
+		}
+		tick += 1;
+	}
 		totalDamage = dmgs.reduce((acc, current) => acc + current, 0);
 		console.log(totalDamage);
 	}
