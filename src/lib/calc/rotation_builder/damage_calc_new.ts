@@ -3,9 +3,9 @@ import { ABILITIES, abils, armour, gear, prayers, weapons } from '../const';
 import { create_damage_object } from './rota_object_helper';
 import { SETTINGS } from '../settings';
 import { calc_crit_damage, get_hit_sequence, add_split_soul, calc_split_soul_hit } from '../damage_calc';
-import { handle_sgb, handle_wen_buff } from './rotation_damage_helper';
-import { aB } from 'vitest/dist/chunks/reporters.D7Jzd9GS';
+import { handle_sgb, handle_wen_buff } from './rotation_damage_helper'
 import { DamageObject, DamageKind, DamageDistribution } from '../types';
+import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 
 // Helper functions for accessing the new DamageObject structure
 function getDamageDistribution(dmgObject: DamageObject, kind: DamageKind): DamageDistribution | undefined {
@@ -73,6 +73,8 @@ function on_stall(settings, abilityKey: string) {
 function on_cast(settings, dmgObject: DamageObject, timers: Record<string, number>, abilityKey: string): DamageObject[] {
     // This function happens as an ability is cast
     // scale to hit chance / damage potential
+    console.log('BASE AD');
+    console.log(settings[SETTINGS.ABILITY_DAMAGE]);
     const dmgObjects = [];
     iterateDistributions(dmgObject, (distribution) => {
         distribution['boosted AD'] = Math.floor(settings[SETTINGS.ABILITY_DAMAGE] * 
@@ -180,6 +182,7 @@ function on_cast(settings, dmgObject: DamageObject, timers: Record<string, numbe
     // TODO - turn off boosted AD stuff here
     // e.g. turn off chaos roar after it's been used
 
+    let preability_AD = dmgObject.distributions.non_crit['boosted AD'];
     // apply ability specific effects
     iterateDistributions(dmgObject, (distribution) => {
         if (abils[abilityKey]['main style'] === 'magic') {
@@ -213,7 +216,7 @@ function on_cast(settings, dmgObject: DamageObject, timers: Record<string, numbe
             }
 
             // combust walk
-            if (abilityKey === ABILITIES.COMBUST_HIT && settings[SETTINGS.WALKED_TARGET] === true) {
+            if (abilityKey === ABILITIES.COMBUST && settings[SETTINGS.WALKED_TARGET] === true) {
                 distribution['boosted AD'] = Math.floor(distribution['boosted AD'] * 2);
             }
 
@@ -311,8 +314,6 @@ function on_cast(settings, dmgObject: DamageObject, timers: Record<string, numbe
     
 
     // Split single cast up into the different effects
-    // e.g. if you cast dclaws, it should then be split up into 4 hits
-    // or for wild magic, it should be split into the two wild magic hits
     if (abils[abilityKey]['ability classification'] == 'multihit') {
         let hits = get_hit_sequence(settings);
 
@@ -334,12 +335,19 @@ function on_cast(settings, dmgObject: DamageObject, timers: Record<string, numbe
         }
         
     }
-    else if (abils[abilityKey]['ability classification'] == 'bleed' || abils[abilityKey]['ability classification'] == 'burn') {
+    else if (['bleed', 'burn', 'dot'].includes(abils[abilityKey]['ability classification'])) {
         let n_hits = abils[abilityKey]['hits'][1].length;
         for (let i = 0; i < n_hits; i++) {
             const clone = structuredClone(dmgObject);
             const hitAbility = abils[abilityKey]['hits'][1][i];
             clone.ability = hitAbility;
+            if (clone.ability === ABILITIES.SOULFIRE_INITIAL) {
+                console.log('soulfire initial');
+                iterateDistributions(clone, (distribution) => {
+                    distribution['boosted AD'] = preability_AD;
+                });
+            }
+
             dmgObjects.push(clone);
         }
     }
@@ -352,12 +360,16 @@ function on_cast(settings, dmgObject: DamageObject, timers: Record<string, numbe
         set_min_var(settings, dmgObject);
     });
     return dmgObjects;
+    dmgObjects.forEach(dmgObject => {
+        console.log('dmgObject');
+        console.log(dmgObject);
+    });
 }
 
 function on_hit(settings, dmgObject: DamageObject, timers: Record<string, number>, abilityKey: string): DamageObject[] {
     // this function runs for all hits (note: not hitsplats)
     const dmgObjects = [dmgObject];
-
+    
     // compute on-hit effects
     if (abils[abilityKey]['on-hit effects'] === true) {
         // Marco - turn on any style specific effects (idt there are any)
@@ -1166,6 +1178,8 @@ function on_damage(settings, dmgObject: DamageObject): DamageObject[] {
         add_adrenaline(settings, (prob * 8));
     }
 
+    
+
     return results;
 
     // TODO
@@ -1264,6 +1278,11 @@ function set_min_var(settings, dmgObject: DamageObject) {
                 distribution['min hit'] += distribution['min hit'] * 0.4 * settings[SETTINGS.FLANKING];
                 distribution['var hit'] += distribution['var hit'] * 0.4 * settings[SETTINGS.FLANKING];
             }
+        }
+
+        if (abilityKey === ABILITIES.AFTERSHOCK) {
+            distribution['min hit'] = distribution['min hit'] * settings[SETTINGS.AFTERSHOCK];
+            distribution['var hit'] = distribution['var hit'] * settings[SETTINGS.AFTERSHOCK];
         }
     });
     

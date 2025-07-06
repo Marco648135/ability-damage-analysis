@@ -73,6 +73,7 @@
 	let gameState = $state({
 		totalDamage: 0,
 		poisonDamage: 0,
+		familiarDamage: 0,
 		settings: Object.fromEntries(
 		Object.entries(settingsConfig).map(([key, value]) => [
 			key,
@@ -99,6 +100,7 @@
 		const dmgResult = calculateTotalDamage(gameState, BAR_SIZE);
 		gameState.totalDamage = dmgResult[0];
 		gameState.poisonDamage = dmgResult[1];
+		gameState.familiarDamage = dmgResult[2];
 		console.log('New Impl Total Damage = ' + gameState.totalDamage + ' (Poison Damage = ' + gameState.poisonDamage + ')');
 	}
 		
@@ -625,6 +627,11 @@
                             {#if gameState.poisonDamage > 0}
                                 <span style="color: #4CAF50" 
 								title="Expected poison damage (approximate - assumes poison+++)">(+{gameState.poisonDamage} )
+								</span>
+                            {/if}
+                            {#if gameState.familiarDamage > 0}
+                                <span style="color: #00FFFF" 
+								title="Expected familiar damage (approximate)">(+{gameState.familiarDamage} )
 								</span>
                             {/if}
                         </p>

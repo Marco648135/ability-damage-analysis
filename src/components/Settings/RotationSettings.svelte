@@ -21,26 +21,46 @@
     settings[SETTINGS.WEAPON]['value'] = SETTINGS.WEAPON_VALUES.TH;
     settings[SETTINGS.ICY_PRECISION]['value'] = 0;
     settings[SETTINGS.BALANCE_BY_FORCE]['value'] = false;
+    settings[SETTINGS.INSTABILITY]['value'] = false;
         
 
     function makeNaked() {
-        settings[SETTINGS.RANGED_HELMET]['value'] = 'none';
-        settings[SETTINGS.RANGED_BODY]['value'] = 'none';
-        settings[SETTINGS.RANGED_LEGS]['value'] = 'none';
-        settings[SETTINGS.RANGED_GLOVES]['value'] = 'none';
-        settings[SETTINGS.RANGED_BOOTS]['value'] = 'none';
-        settings[SETTINGS.NECKLACE]['value'] = 'none';
-        settings[SETTINGS.CAPE]['value'] = 'none';
-        settings[SETTINGS.RING]['value'] = 'none';
-        settings[SETTINGS.POCKET]['value'] = 'none';
-        settings[SETTINGS.AURA]['value'] = 'none';
-        settings[SETTINGS.FAMILIAR]['value'] = 'none';
+        const armour = [
+            SETTINGS.RANGED_HELMET,
+            SETTINGS.RANGED_BODY,
+            SETTINGS.RANGED_LEGS,
+            SETTINGS.RANGED_GLOVES,
+            SETTINGS.RANGED_BOOTS,
+            SETTINGS.MAGIC_HELMET,
+            SETTINGS.MAGIC_BODY,
+            SETTINGS.MAGIC_LEGS,
+            SETTINGS.MAGIC_GLOVES,
+            SETTINGS.MAGIC_BOOTS,
+            SETTINGS.NECKLACE,
+            SETTINGS.CAPE,
+            SETTINGS.RING,
+            SETTINGS.POCKET,
+            SETTINGS.AURA,
+            SETTINGS.FAMILIAR,
+        ]
+        armour.forEach(armour => {
+            settings[armour]['value'] = 'none';
+        });
+        settings[SETTINGS.MAGIC_TH]['value'] = SETTINGS.MAGIC_TH_VALUES.CUSTOM;
+        settings[SETTINGS.TH_TIER_CUSTOM]['value'] = 60
+        settings[SETTINGS.MAGIC_PRAYER]['value'] = SETTINGS.MAGIC_PRAYER_VALUES.NONE;
+        settings[SETTINGS.WEAPON]['value'] = SETTINGS.WEAPON_VALUES.DW;
+
 
         settings[SETTINGS.LVL20ARMOUR]['value'] = false;
         settings[SETTINGS.BITING]['value'] = 0;
-        settings[SETTINGS.ERUPTIVE]['value'] = 2;
+        settings[SETTINGS.ERUPTIVE]['value'] = 0;
+        settings[SETTINGS.PRECISE]['value'] = 6;
+        settings[SETTINGS.AFTERSHOCK]['value'] = 0;
+        
         settings[SETTINGS.VULN]['value'] = 'none';
 
+        settings[SETTINGS.MAGIC_LEVEL]['value'] = 99;
         settings[SETTINGS.RANGED_LEVEL]['value'] = 99;
         settings[SETTINGS.REAPER_CREW]['value'] = false;
         settings[SETTINGS.RANGED_PRAYER]['value'] = 'none ranged';
@@ -72,7 +92,7 @@
         
         
     }
-    //makeNaked();
+    makeNaked();
     // testPreset();
     //settings[SETTINGS.ICY_CHILL_STACKS].value = 10;
     updateDamages();
@@ -146,20 +166,39 @@
                         bind:setting={settings[SETTINGS.MODE]}
                         onchange={() => updateDamages()}
                     />
-                    <Number
-                        bind:setting={settings[SETTINGS.RANGED_LEVEL]}
-                        onchange={() => updateDamages()}
-                        img="/effect_icons/ranged_level.png"step="1"
-                        max="150"
-                        min="1"
-                    />
-                    <Number
-                        bind:setting={settings[SETTINGS.MAGIC_LEVEL]}
-                        onchange={() => updateDamages()}
-                        img="/effect_icons/magic.png"step="1"
-                        max="150"
-                        min="1"
-                    />
+                    {#if styleTab == 'ranged'}
+                        <Number
+                            bind:setting={settings[SETTINGS.RANGED_LEVEL]}
+                            onchange={() => updateDamages()}
+                            img="/effect_icons/ranged_level.png"step="1"
+                            max="150"
+                            min="1"
+                        />
+                    {:else if styleTab == 'magic'}
+                        <Number
+                            bind:setting={settings[SETTINGS.MAGIC_LEVEL]}
+                            onchange={() => updateDamages()}
+                            img="/effect_icons/magic.png"step="1"
+                            max="150"
+                            min="1"
+                        />
+                    {:else if styleTab == 'melee'}
+                        <Number
+                            bind:setting={settings[SETTINGS.STRENGTH_LEVEL]}
+                            onchange={() => updateDamages()}
+                            img="/effect_icons/strength.png"step="1"
+                            max="150"
+                            min="1"
+                        />
+                    {:else if styleTab == 'necro'}
+                        <Number
+                            bind:setting={settings[SETTINGS.NECROMANCY_LEVEL]}
+                            onchange={() => updateDamages()}
+                            img="/effect_icons/necromancy.png"step="1"
+                            max="150"
+                            min="1"
+                        />
+                    {/if}
                     
                     <Number
                         bind:setting={settings[SETTINGS.HIT_CHANCE]}
@@ -202,16 +241,31 @@
                 </div>
                 <div class="md:col-span-1 space-y-2">
                     <h5 class="uppercase font-bold text-lg text-center">Damage Buffs</h5>
+                    {#if styleTab === 'ranged'}
                     <Select
                             bind:setting={settings[SETTINGS.RANGED_PRAYER]}
                             onchange={() => updateDamages()}
                             img="/effect_icons/Prayer.webp"
                     />
+                    {:else if styleTab === 'magic'}
                     <Select
                             bind:setting={settings[SETTINGS.MAGIC_PRAYER]}
                             onchange={() => updateDamages()}
                             img="/effect_icons/Prayer.webp"
                     />
+                    {:else if styleTab === 'melee'}
+                    <Select
+                            bind:setting={settings[SETTINGS.MELEE_PRAYER]}
+                            onchange={() => updateDamages()}
+                            img="/effect_icons/Prayer.webp"
+                    />
+                    {:else if styleTab === 'necro'} 
+                    <Select
+                            bind:setting={settings[SETTINGS.NECROMANCY_PRAYER]}
+                            onchange={() => updateDamages()}
+                            img="/effect_icons/Prayer.webp"
+                    />
+                    {/if}
                     <Select
                         bind:setting={settings[SETTINGS.SLAYER_HELM]}
                         onchange={() => updateDamages()}
@@ -332,49 +386,97 @@
                     />
                 </div>
             {:else if tab === 'equipment'}
-                {#if styleTab === 'ranged'}
-                    <div class="md:col-span-1">
-                        <h5 class="uppercase font-bold text-lg text-center mb-4">Armour</h5>
-                        <Select
-                            bind:setting={settings[SETTINGS.RANGED_HELMET]}
+                <div class="md:col-span-1">
+                    <h5 class="uppercase font-bold text-lg text-center mb-4">Armour</h5>
+                        {#if styleTab === 'ranged'}
+                            <Select
+                                bind:setting={settings[SETTINGS.RANGED_HELMET]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Head_slot.webp"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.RANGED_BODY]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Torso_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.RANGED_LEGS]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Legs_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.RANGED_GLOVES]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Hands_slot.webp"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.RANGED_BOOTS]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Feet_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.NECKLACE]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Neck_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.CAPE]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Back_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.RING]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Ring_slot.png"
+                            />
+                        {:else if styleTab === 'magic'}
+                            <Select
+                            bind:setting={settings[SETTINGS.MAGIC_HELMET]}
                             onchange={() => updateDamages()}
                             img="/armour_icons/Head_slot.webp"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.RANGED_BODY]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Torso_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.RANGED_LEGS]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Legs_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.RANGED_GLOVES]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Hands_slot.webp"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.RANGED_BOOTS]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Feet_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.NECKLACE]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Neck_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.CAPE]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Back_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.RING]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Ring_slot.png"
-                        />
+                              />
+                            <Select
+                                bind:setting={settings[SETTINGS.MAGIC_BODY]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Torso_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.MAGIC_LEGS]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Legs_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.MAGIC_GLOVES]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Hands_slot.webp"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.MAGIC_BOOTS]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Feet_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.NECKLACE]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Neck_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.CAPE]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Back_slot.png"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.RING]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Ring_slot.png"
+                            />
+                            
+                            <Select
+                                bind:setting={settings[SETTINGS.AUTO_CAST]}
+                                onchange={() => updateDamages()}
+                            />
+                        {:else if styleTab === 'melee'}
+                        {/if}
                         <Select
                             bind:setting={settings[SETTINGS.POCKET]}
                             onchange={() => updateDamages()}
@@ -390,106 +492,120 @@
                             onchange={() => updateDamages()}
                             img="/effect_icons/familiar.png"
                         />
+                        <Number
+                                bind:setting={settings[SETTINGS.FAMILIAR_ACCURACY]}
+                                onchange={() => updateDamages()}
+                                img="/effect_icons/familiar.png"
+                            />
                         <Checkbox
                             bind:setting={settings[SETTINGS.KALG_SPEC]}
                             onchange={() => updateDamages()}
                             img="/effect_icons/crit_i_kal.png"
                         />
                     </div>
-                    <div class="md:col-span-1">
-                        <h5 class="uppercase font-bold text-lg text-center mb-4">Perks</h5>
-                        <Checkbox
-                            bind:setting={settings[SETTINGS.LVL20ARMOUR]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/level-20.png"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.BITING]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Biting.webp"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.PRECISE]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Precise.webp"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.ERUPTIVE]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Eruptive.webp"
-                            max="4"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.CAROMING]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/caroming.png"
-                            max="4"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.FLANKING]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Flanking.webp"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.GENOCIDAL]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/genocidal.png"
-                            max="4.9"
-                            step="0.1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.RUTHLESS_RANK]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Ruthless.webp"
-                            max="3"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.RUTHLESS_STACKS]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Ruthless.webp"
-                            max="5"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.IMPATIENT]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Impatient.png"
-                            max="4"
-                            step="1"
-                            min="0"
-                        />
-                        <Checkbox
-                            bind:setting={settings[SETTINGS.SLAYER_PERK_UNDEAD]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/25px-Undead_Slayer.webp"
-                        />
-                        <Checkbox
-                            bind:setting={settings[SETTINGS.SLAYER_PERK_DRAGON]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/dragon_slayer_perk.png"
-                        />
-                        <Checkbox
-                            bind:setting={settings[SETTINGS.SLAYER_PERK_DEMON]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/demon_slayer_perk.webp"
-                        />
-                    </div>   
-                    <div class="md:col-span-1">
-                        <h5 class="uppercase font-bold text-lg text-center mb-4">Weapons</h5>
+                <div class="md:col-span-1">
+                    <h5 class="uppercase font-bold text-lg text-center mb-4">Perks</h5>
+                    <Checkbox
+                        bind:setting={settings[SETTINGS.LVL20ARMOUR]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/level-20.png"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.BITING]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/Biting.webp"
+                        step="1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.PRECISE]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/Precise.webp"
+                        step="1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.ERUPTIVE]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/Eruptive.webp"
+                        max="4"
+                        step="1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.CAROMING]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/caroming.png"
+                        max="4"
+                        step="1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.FLANKING]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/Flanking.webp"
+                        step="1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.GENOCIDAL]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/genocidal.png"
+                        max="4.9"
+                        step="0.1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.RUTHLESS_RANK]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/Ruthless.webp"
+                        max="3"
+                        step="1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.RUTHLESS_STACKS]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/Ruthless.webp"
+                        max="5"
+                        step="1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.AFTERSHOCK]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/Aftershock.png"
+                        max="4"
+                        step="1"
+                        min="0"
+                    />
+                    <Number
+                        bind:setting={settings[SETTINGS.IMPATIENT]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/Impatient.png"
+                        max="4"
+                        step="1"
+                        min="0"
+                    />
+                    <Checkbox
+                        bind:setting={settings[SETTINGS.SLAYER_PERK_UNDEAD]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/25px-Undead_Slayer.webp"
+                    />
+                    <Checkbox
+                        bind:setting={settings[SETTINGS.SLAYER_PERK_DRAGON]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/dragon_slayer_perk.png"
+                    />
+                    <Checkbox
+                        bind:setting={settings[SETTINGS.SLAYER_PERK_DEMON]}
+                        onchange={() => updateDamages()}
+                        img="/effect_icons/demon_slayer_perk.webp"
+                    />
+                </div>   
+                <div class="md:col-span-1">
+                    <h5 class="uppercase font-bold text-lg text-center mb-4">Weapons</h5>
+                    {#if styleTab === 'ranged'}
                         <Select
                             bind:setting={settings[SETTINGS.WEAPON]}
                             onchange={() => updateDamages()}
@@ -546,138 +662,8 @@
                             onchange={() => updateDamages()}
                             img="/effect_icons/shard_of_genesis.png"
                         />
-                    </div>
                     {:else if styleTab === 'magic'}
-                    <div class="md:col-span-1">
-                        <h5 class="uppercase font-bold text-lg text-center">Armour</h5>
-                        <Select
-                            bind:setting={settings[SETTINGS.MAGIC_HELMET]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Head_slot.webp"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.MAGIC_BODY]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Torso_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.MAGIC_LEGS]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Legs_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.MAGIC_GLOVES]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Hands_slot.webp"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.MAGIC_BOOTS]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Feet_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.NECKLACE]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Neck_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.CAPE]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Back_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.RING]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Ring_slot.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.POCKET]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Pocket_slot.webp"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.AURA]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/aura.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.FAMILIAR]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/familiar.png"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.AUTO_CAST]}
-                            onchange={() => updateDamages()}
-                        />
-                    </div>
-                    <div class="md:col-span-1">
-                        <h5 class="uppercase font-bold text-lg text-center">Perks</h5>
-                        <Checkbox
-                            bind:setting={settings[SETTINGS.LVL20ARMOUR]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/level-20.png"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.BITING]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Biting.webp"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.PRECISE]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Precise.webp"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.ERUPTIVE]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Eruptive.webp"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.FLANKING]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Flanking.webp"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.LUNGING]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Lunging.webp"
-                            step="1"
-                            min="0"
-                            max="4"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.GENOCIDAL]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/genocidal.png"
-                            max="4.9"
-                            step="0.1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.RUTHLESS_RANK]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Ruthless.webp"
-                            max="3"
-                            step="1"
-                            min="0"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.RUTHLESS_STACKS]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/Ruthless.webp"
-                            max="5"
-                            step="1"
-                            min="0"
-                        />
-                    </div>
+
                     <div class="md:col-span-1">
                         <h5 class="uppercase font-bold text-lg text-center">Weapons</h5>
                         <Select
@@ -727,8 +713,12 @@
                             img="/effect_icons/shard_of_genesis.png"
                         />
                     </div>
-                {:else if styleTab === 'melee'}
-                {/if}
+                    {:else if styleTab === 'melee'}
+                    {:else if styleTab === 'necro'}
+                    {/if}
+                </div>
+
+                
             {:else if tab === 'bosses'}
                 <div class="md:col-span-1 space-y-4">
                     <h5 class="uppercase font-bold text-lg text-center mb-4">Boss Settings</h5>

@@ -10,6 +10,9 @@ import { abilities as rangedAbils } from '../../ranged/abilities';
 import { abilities as magicAbils } from '../../magic/abilities';
 import { gearSwaps, offGcdAbilities as specialAbils } from '../../special/abilities';
 import { DamageObject } from '../types';
+import { ABILITIES } from '../const';
+import { familiars } from '$lib/familiars/familiars';
+import { B } from 'vitest/dist/chunks/benchmark.geERunq4';
 
 // Interface for the game state
 interface GameState {
@@ -31,12 +34,14 @@ interface RotationState {
     hit_delay: number;
     start_tick: number;
     hitCount: number;
+    lastAftershockProc: number; // Track damage at last proc
 }
 
 //TODO use this for the return type of calculateTotalDamage
 interface DamageResult {
     regularDamage: number;
     poisonDamage: number;
+    familiarDamage: number;
 }
 
 const allAbilities = { ...rangedAbils, ...magicAbils };
@@ -58,7 +63,7 @@ const allAbilities = { ...rangedAbils, ...magicAbils };
  * @returns A tuple containing [totalDamage, poisonDamage]:
 
  */
-export function calculateTotalDamage(gameState: GameState, BAR_SIZE: number): [number, number] {
+export function calculateTotalDamage(gameState: GameState, BAR_SIZE: number): [number, number, number] {
     const state: RotationState = {
         dmgs: [],
         damageQueue: {},
@@ -66,7 +71,8 @@ export function calculateTotalDamage(gameState: GameState, BAR_SIZE: number): [n
         tick: 0,
         hit_delay: 1, // TODO implement hit delay properly (define min delay for each ability)
         start_tick: 0,
-        hitCount: 0
+        hitCount: 0,
+        lastAftershockProc: 0
     };
 
     const adaptedSettings = Object.fromEntries(
@@ -75,12 +81,14 @@ export function calculateTotalDamage(gameState: GameState, BAR_SIZE: number): [n
     const settingsCopy = structuredClone(adaptedSettings);
 
     // Process through each tick until we reach the end, +20 to finish handling bleeds
-    while (state.tick < BAR_SIZE + 20) {
+    const extraTicks = 10;
+    while (state.tick < BAR_SIZE + extraTicks) {
         processCurrentTick(state, gameState, settingsCopy, BAR_SIZE);
     }
     const totalDamage = state.dmgs.reduce((acc, current) => acc + current, 0);
     const poisonDamage = calcPoisonDamage(state.hitCount, settingsCopy);
-    return [totalDamage, poisonDamage];
+    const familiarDamage = calcFamiliarDamage(gameState.abilityBar, settingsCopy);
+    return [totalDamage, poisonDamage, familiarDamage];
 }
 
 /**
@@ -123,8 +131,8 @@ function processCurrentTick(state: RotationState, gameState: GameState, settings
         state.damageQueue[hit_tick] ??= [];
         handle_buffs(settingsCopy, state.timers, stalledAbility);
 
-        if (stalledAbility in rangedAbils) {
-            processRangedAbility(state, settingsCopy, stalledAbility, hit_tick); //TODO fix / remove
+        if (stalledAbility in allAbilities) {
+            processStalledAbility(state, settingsCopy, stalledAbility, hit_tick); //TODO fix / remove
         }
     }
     // Then process any regular ability on this tick
@@ -142,12 +150,34 @@ function processCurrentTick(state: RotationState, gameState: GameState, settings
     processAbility(state, gameState, settingsCopy, abilityKey, abil_duration);
 }
 
-function handleNullAbilityTick(state: RotationState, gameState: GameState, settingsCopy: any) {
+/**
+ * Processes a single tick's worth of common operations that happen every tick.
+ * This includes handling extra actions, copying stacks, managing timers, 
+ * processing queued damage, and advancing the tick counter.
+ * 
+ * @param tickToProcess - The specific tick number to process (may differ from state.tick for channeled abilities)
+ * @param state - The rotation state tracking damage, queues, and timers
+ * @param gameState - The game state containing settings, ability bar, and buffs
+ * @param settingsCopy - A copy of the game settings that can be modified during processing
+ */
+function processTickOperations(
+    tickToProcess: number,
+    state: RotationState, 
+    gameState: GameState, 
+    settingsCopy: any
+) {
     handleExtraActions(settingsCopy, state.timers, state.tick, gameState);
     copyStacks(state.tick, settingsCopy, gameState);
     handleTimers(state.timers, settingsCopy);
-    processQueuedDamage(state.tick, state, settingsCopy);
+    processQueuedDamage(tickToProcess, state, settingsCopy);
+    handleAftershock(state, settingsCopy);
+
+    
     state.tick += 1;
+}
+
+function handleNullAbilityTick(state: RotationState, gameState: GameState, settingsCopy: any) {
+    processTickOperations(state.tick, state, gameState, settingsCopy);
 }
 
 function processAbility(
@@ -155,10 +185,12 @@ function processAbility(
     gameState: GameState, 
     settingsCopy: any, 
     abilityKey: string, 
-    abil_duration: number
+    abil_duration: number,
+    onStall = true
 ) {
     //TODO release stalled abilities here
     style_specific_unification(settingsCopy, abils[abilityKey]['main style']); //Update gear/combat style
+    
     on_stall(settingsCopy, abilityKey);
     settingsCopy[SETTINGS.ABILITY_DAMAGE] = calc_base_ad(settingsCopy);
     
@@ -183,7 +215,7 @@ function processAbility(
     processAbilityTicks(state, gameState, settingsCopy, abilityKey, abil_duration);
 }
 
-function processRangedAbility(
+function processStalledAbility(
     state: RotationState, 
     settingsCopy: any, 
     abilityKey: string, 
@@ -200,29 +232,17 @@ function processRangedAbility(
     }
 }
 
-function zeroDamageObject(dmgObject: any) {
+function zeroDamageObject(dmgObject: DamageObject) {
     // Zero out all damage values while preserving the object structure
-    if (dmgObject.non_crit) {
-        // Handle both property naming conventions
-        if (dmgObject.non_crit['damage list']) {
-            dmgObject.non_crit['damage list'] = dmgObject.non_crit['damage list'].map(() => 0);
+    Object.values(dmgObject.distributions).forEach(distribution => {
+        if (distribution) {
+            if (distribution['damage list']) {
+                distribution['damage list'] = distribution['damage list'].map(() => 0);
+            }
+            distribution['min hit'] = 0;
+            distribution['var hit'] = 0;
         }
-        if (dmgObject.non_crit.damage_list) {
-            dmgObject.non_crit.damage_list = dmgObject.non_crit.damage_list.map(() => 0);
-        }
-        dmgObject.non_crit.min_hit = 0;
-        dmgObject.non_crit.var_hit = 0;
-    }
-    if (dmgObject.crit) {
-        if (dmgObject.crit['damage list']) {
-            dmgObject.crit['damage list'] = dmgObject.crit['damage list'].map(() => 0);
-        }
-        if (dmgObject.crit.damage_list) {
-            dmgObject.crit.damage_list = dmgObject.crit.damage_list.map(() => 0);
-        }
-        dmgObject.crit.min_hit = 0;
-        dmgObject.crit.var_hit = 0;
-    }
+    });
     return dmgObject;
 }
 
@@ -242,6 +262,7 @@ function processSingleHitAbility(
             if (settingsCopy.isNulledTick) {
                 namedDmgObject = zeroDamageObject(namedDmgObject);
             }
+            state.damageQueue[hit_tick] ??= [];
             state.damageQueue[hit_tick].push(namedDmgObject);
         });
     });
@@ -273,15 +294,19 @@ function processBleedAbility(
 ) {
     let dmgObject = create_damage_object(settingsCopy, abilityKey);
     let dmgObjects = on_cast(settingsCopy, dmgObject, state.timers, abilityKey);
+    console.log('dmgObjects');
+    console.log(dmgObjects);
     let i = 0;
     dmgObjects.forEach(element => {
-        let hit = on_hit(settingsCopy, element, state.timers, abilityKey)[0]; // todo fix
-        if (settingsCopy.isNulledTick) {
-            dmgObject = zeroDamageObject(dmgObject);
-        }
-        let htick = hit_tick + abils[abilityKey]['hit_timings'][i];
-        state.damageQueue[htick] ??= [];
-        state.damageQueue[htick].push(hit);
+        let hits = on_hit(settingsCopy, element, state.timers, element.ability); // todo fix
+        hits.forEach(hit => {
+            if (settingsCopy.isNulledTick) {
+                hit = zeroDamageObject(hit);
+            }
+            let htick = hit_tick + abils[abilityKey]['hit_timings'][i];
+            state.damageQueue[htick] ??= [];
+            state.damageQueue[htick].push(hit);
+        });
         i++;
     });
 }
@@ -303,11 +328,7 @@ function processAbilityTicks(
         if (isChannelled(settingsCopy, abilityKey)) {
             processChannelledTick(state, gameState, settingsCopy, abilityKey, i, rota);
         }
-        handleExtraActions(settingsCopy, state.timers, state.tick, gameState);
-        copyStacks(state.tick, settingsCopy, gameState);
-        handleTimers(state.timers, settingsCopy);
-        processQueuedDamage(i, state, settingsCopy);
-        state.tick += 1;
+        processTickOperations(i, state, gameState, settingsCopy);
         if (gameState.abilityBar[i+1]) {
             break;
         }
@@ -404,6 +425,25 @@ export function calcPoisonDamage(n_hits: number, settingsCopy: any) {
     return Math.floor(poison_dmg * n_hits);
 }
 
+/**
+ * Calculates the poison damage for the rotation. //TODO properly implement
+ * @param state - The current state of the damage calculation.
+ * @param settingsCopy - The settings copy used for rotation damage calculation.
+ * @returns The total poison damage for the rotation.
+ */
+export function calcFamiliarDamage(abilityBar: string[], settingsCopy: any) {
+    let familiar_dmg = 0;
+    let familiar = settingsCopy[SETTINGS.FAMILIAR];
+    let lastTick = findLastValueIndex(abilityBar);
+
+    if (Object.keys(familiars).includes(familiar)) {
+        let expDamage = (settingsCopy[SETTINGS.FAMILIAR_ACCURACY] / 100.0) * familiars[familiar].max_hit / 2;
+        let n_hits = Math.floor(lastTick / familiars[familiar].attack_rate);
+        familiar_dmg = expDamage * n_hits;
+    }
+    return Math.floor(familiar_dmg);
+}
+
 function copyStacks(tick: number, settings: any, gameState: GameState) {
     for(let key in gameState.stacks) {
         // Convert to number before storing
@@ -457,4 +497,30 @@ function handleTimers(timers: Record<string, number>, settings: any) {
 
 function isChannelled(settingsCopy: any, key: string): boolean {
     return abils[key]['ability classification'] === 'channel';
+}
+
+/**
+ * 
+ */
+function handleAftershock(state: RotationState, settingsCopy: any) {
+        // Check every 10 ticks if 500 damage has been done since last checkpoint
+        if (state.tick % 10 === 0 && settingsCopy[SETTINGS.AFTERSHOCK] > 0) {
+            const currentTotalDamage = state.dmgs.reduce((acc, current) => acc + current, 0);
+            const damageSinceLastCheck = currentTotalDamage - state.lastAftershockProc;
+            
+            if (damageSinceLastCheck >= 50000) {
+                state.lastAftershockProc = currentTotalDamage;
+                processSingleHitAbility(state, settingsCopy, ABILITIES.AFTERSHOCK, state.tick+2);
+            }
+        }
+}
+
+function findLastValueIndex(arr) {
+    console.log(arr);
+    for (let i = arr.length - 1; i >= 0; i--) {
+        if (arr[i] != null && arr[i] !== '' && arr[i] !== undefined) {
+            return i;
+        }
+    }
+    return -1; // No value found
 } 

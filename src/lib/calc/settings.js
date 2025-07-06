@@ -110,12 +110,14 @@ const SETTINGS = {
     TARGET_HP_PERCENT: 'target hp percent',
     GENOCIDAL: 'genocidal',
     IMPATIENT: 'impatient',
+    AFTERSHOCK: 'aftershock',
     FAMILIAR: 'familiar',
     FAMILIAR_VALUES: {
         NONE: 'none',
         RIPPER_DEMON: 'ripper demon',
         KALGERION_DEMON: 'kalgerion demon'
     },
+    FAMILIAR_ACCURACY: 'familiar accuracy',
     AURA: 'aura',
     AURA_VALUES: {
         NONE: 'none',
@@ -1056,6 +1058,10 @@ const settingsConfig = {
         label: 'Impatient',
         default: 4
     },
+    [SETTINGS.AFTERSHOCK]: {
+        label: 'Aftershock',
+        default: 4
+    },
     [SETTINGS.FAMILIAR]: {
         label: 'Familiar',
         default: SETTINGS.FAMILIAR_VALUES.KALGERION_DEMON,
@@ -1064,6 +1070,10 @@ const settingsConfig = {
             { text: 'Ripper demon', value: SETTINGS.FAMILIAR_VALUES.RIPPER_DEMON },
             { text: 'Kalgerion demon', value: SETTINGS.FAMILIAR_VALUES.KALGERION_DEMON }
         ]
+    },
+    [SETTINGS.FAMILIAR_ACCURACY]: {
+        label: 'Familiar Accuracy',
+        default: 100,
     },
     [SETTINGS.AURA]: {
         label: 'Aura',
@@ -2159,11 +2169,11 @@ const settingsConfig = {
     },
     [SETTINGS.DIVINE_RAGE]: {
         label: 'Divine rage',
-        default: true
+        default: false
     },
     [SETTINGS.ECLIPSED_SOUL]: {
         label: 'Eclipsed soul',
-        default: true
+        default: false
     },
     [SETTINGS.SHOW_BOLG_STACKS]: {
         label: 'Show Bolg Stacks',

@@ -1489,6 +1489,11 @@ const ABILITIES = {
     GREATER_RICOCHET_3: 'greater ricochet 3',
     GREATER_RICOCHET: 'greater ricochet',
     CORRUPTION_SHOT: 'corruption shot',
+    CORRUPTION_SHOT_HIT_1: 'corruption shot hit 1',
+    CORRUPTION_SHOT_HIT_2: 'corruption shot hit 2',
+    CORRUPTION_SHOT_HIT_3: 'corruption shot hit 3',
+    CORRUPTION_SHOT_HIT_4: 'corruption shot hit 4',
+    CORRUPTION_SHOT_HIT_5: 'corruption shot hit 5',
     SNAP_SHOT_1: 'snap shot 1',
     SNAP_SHOT_2: 'snap shot 2',
     SNAP_SHOT: 'snap shot',
@@ -1555,6 +1560,11 @@ const ABILITIES = {
     MAGMA_TEMPEST_HIT: 'magma tempest hit',
     MAGMA_TEMPEST: 'magma tempest',
     CORRUPTION_BLAST: 'corruption blast',
+    CORRUPTION_BLAST_HIT_1: 'corruption blast hit 1',
+    CORRUPTION_BLAST_HIT_2: 'corruption blast hit 2',
+    CORRUPTION_BLAST_HIT_3: 'corruption blast hit 3',
+    CORRUPTION_BLAST_HIT_4: 'corruption blast hit 4',
+    CORRUPTION_BLAST_HIT_5: 'corruption blast hit 5',
     GREATER_SONIC_WAVE: 'greater sonic wave',
     ASPHYXIATE_HIT: 'asphyxiate hit',
     ASPHYXIATE: 'asphyxiate',
@@ -1569,7 +1579,7 @@ const ABILITIES = {
     SMOKE_TENDRILS_4: 'smoke tendrils 4',
     SMOKE_TENDRILS: 'smoke tendrils',
     OMNIPOWER_REGULAR: 'omnipower regular',
-    OMNIPOWER_IGNEOUS: 'omnipower igneous',
+    OMNIPOWER_IGNEOUS_HIT: 'omnipower igneous',
     OMNIPOWER: 'omnipower',
     TSUNAMI: 'tsunami',
     SUNSHINE_DOT: 'sunshine dot',
@@ -2408,6 +2418,7 @@ const abils = {
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'melee',
         'damage type': 'melee',
+        'adren cost': 60,
         hits: {
             1: [ABILITIES.VINE_CALL_INTIAL],
             2: [],
@@ -2475,7 +2486,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'melee',
-        'damage type': 'melee'
+        'damage type': 'melee',
+        'adren cost': 50
     },
     [ABILITIES.WARSTRIKE]: {
         // ability name
@@ -2487,7 +2499,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'melee',
-        'damage type': 'melee'
+        'damage type': 'melee',
+        'adren cost': 50
     },
     [ABILITIES.SUNDER]: {
         // ability name
@@ -2499,7 +2512,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'melee',
-        'damage type': 'melee'
+        'damage type': 'melee',
+        'adren cost': 50
     },
     [ABILITIES.BACKSTAB]: {
         // ability name
@@ -2586,7 +2600,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'melee',
-        'damage type': 'melee'
+        'damage type': 'melee',
+        'adren cost': 50
     },
     [ABILITIES.POWERSTAB]: {
         // ability name
@@ -2598,7 +2613,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'melee',
-        'damage type': 'melee'
+        'damage type': 'melee',
+        'adren cost': 50
     },
     [ABILITIES.SLICE_N_DICE_1]: {
         // ability name
@@ -2657,7 +2673,8 @@ const abils = {
                 'next hit',
                 ABILITIES.SLICE_N_DICE_3
             ]
-        }
+        },
+        'adren cost': 50
     },
     [ABILITIES.DRACONIC_PUNCTURE_HIT]: {
         // ability name
@@ -2684,7 +2701,8 @@ const abils = {
         'damage type': 'melee',
         hits: {
             1: [ABILITIES.DRACONIC_PUNCTURE_HIT, 'next hit', ABILITIES.DRACONIC_PUNCTURE_HIT]
-        }
+        },
+        'adren cost': 25
     },
     [ABILITIES.SWEEP_HIT]: {
         // ability name
@@ -2709,6 +2727,7 @@ const abils = {
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'melee',
         'damage type': 'melee',
+        'adren cost': 30,
         hits: {
             1: [ABILITIES.SWEEP_HIT, 'next hit', ABILITIES.SWEEP_HIT]
         }
@@ -3090,7 +3109,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3102,7 +3121,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3114,7 +3133,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3143,7 +3162,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3155,7 +3174,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3167,7 +3186,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3266,7 +3285,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': false, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'multihit', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic',
@@ -3279,7 +3298,8 @@ const abils = {
             6: [ABILITIES.MAGMA_TEMPEST_HIT],
             7: [ABILITIES.MAGMA_TEMPEST_HIT],
             8: [ABILITIES.MAGMA_TEMPEST_HIT]
-        }
+        },
+        hit_timings: [3, 5, 7, 9, 11, 13, 15, 17]
     },
     [ABILITIES.CORRUPTION_BLAST]: {
         // ability name
@@ -3291,7 +3311,77 @@ const abils = {
         'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'damage type': 'magic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        hits: {
+            1: [
+                ABILITIES.CORRUPTION_BLAST_HIT_1,
+                ABILITIES.CORRUPTION_BLAST_HIT_2,
+                ABILITIES.CORRUPTION_BLAST_HIT_3,
+                ABILITIES.CORRUPTION_BLAST_HIT_4,
+                ABILITIES.CORRUPTION_BLAST_HIT_5
+            ]
+        },
+        hit_timings: [1, 3, 5, 7, 9],
+    },
+    [ABILITIES.CORRUPTION_BLAST_HIT_1]: {
+        // ability name
+        'min hit': 0.6, // min % of abil expressed as a decimal
+        'var hit': 0.2,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'magic',
+        'damage type': 'magic',
+    },
+    [ABILITIES.CORRUPTION_BLAST_HIT_2]: {
+        // ability name
+        'min hit': 0.48, // min % of abil expressed as a decimal
+        'var hit': 0.16,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'magic',
+        'damage type': 'magic',
+    },
+    [ABILITIES.CORRUPTION_BLAST_HIT_3]: {
+        // ability name
+        'min hit': 0.384, // min % of abil expressed as a decimal
+        'var hit': 0.128,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'magic',
+        'damage type': 'magic',
+    },
+    [ABILITIES.CORRUPTION_BLAST_HIT_4]: {
+        // ability name
+        'min hit': 0.3072, // min % of abil expressed as a decimal
+        'var hit': 0.1024,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'magic',
+        'damage type': 'magic',
+    },
+    [ABILITIES.CORRUPTION_BLAST_HIT_5]: {
+        // ability name
+        'min hit': 0.24576, // min % of abil expressed as a decimal
+        'var hit': 0.8192,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'magic',
+        'damage type': 'magic',
     },
     [ABILITIES.GREATER_SONIC_WAVE]: {
         // ability name
@@ -3312,7 +3402,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'threshold', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3328,6 +3418,7 @@ const abils = {
         'ability type': 'threshold', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'duration': 7,
         hits: {
             1: [ABILITIES.ASPHYXIATE_HIT],
             2: [],
@@ -3381,13 +3472,14 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'multihit', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'threshold', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic',
         hits: {
             1: [ABILITIES.WILD_MAGIC_HIT, 'next hit', ABILITIES.WILD_MAGIC_HIT]
-        }
+        },
+        hit_timings: [2, 2]
     },
     [ABILITIES.DETONATE]: {
         // ability name
@@ -3408,7 +3500,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'threshold', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3420,7 +3512,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'threshold', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3432,7 +3524,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'threshold', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3444,7 +3536,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'threshold', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
@@ -3460,6 +3552,7 @@ const abils = {
         'ability type': 'threshold', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic',
+        'duration': 7,
         hits: {
             1: [ABILITIES.SMOKE_TENDRILS_1],
             2: [],
@@ -3482,7 +3575,7 @@ const abils = {
         'main style': 'magic',
         'damage type': 'magic' // basic, threshold, special attack, ability (necromancy classification), ultimate
     },
-    [ABILITIES.OMNIPOWER_IGNEOUS]: {
+    [ABILITIES.OMNIPOWER_IGNEOUS_HIT]: {
         // ability name
         'min hit': 1.2, // min % of abil expressed as a decimal
         'var hit': 0.3,
@@ -3505,7 +3598,7 @@ const abils = {
         'ability type': 'ultimate', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         hits: {
-            1: [ABILITIES.OMNIPOWER_IGNEOUS, "next hit", ABILITIES.OMNIPOWER_IGNEOUS, "next hit", ABILITIES.OMNIPOWER_IGNEOUS, "next hit", ABILITIES.OMNIPOWER_IGNEOUS]
+            1: [ABILITIES.OMNIPOWER_IGNEOUS_HIT, "next hit", ABILITIES.OMNIPOWER_IGNEOUS_HIT, "next hit", ABILITIES.OMNIPOWER_IGNEOUS_HIT, "next hit", ABILITIES.OMNIPOWER_IGNEOUS_HIT]
         },
         hit_timings: [0, 0, 0, 0]
     },
@@ -3580,7 +3673,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic'
@@ -3592,7 +3685,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic'
@@ -3604,7 +3697,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic'
@@ -3616,7 +3709,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic'
@@ -3628,7 +3721,7 @@ const abils = {
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
-        'ability classification': 'channel', // bleed, dot, burn, channel, regular, multihit
+        'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
         'damage type': 'magic'
@@ -3650,7 +3743,8 @@ const abils = {
             3: [ABILITIES.TEMPEST_OF_ARMADYL_HIT_3],
             4: [ABILITIES.TEMPEST_OF_ARMADYL_HIT_4],
             5: [ABILITIES.TEMPEST_OF_ARMADYL_HIT_5]
-        }
+        },
+        hit_timings: [0, 1, 2, 3, 4]
     },
     [ABILITIES.INSTABILITY]: {
         // ability name
@@ -3662,7 +3756,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 50
     },
     [ABILITIES.CLAWS_OF_GUTHIX]: {
         // ability name
@@ -3674,7 +3769,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 25
     },
     [ABILITIES.IBAN_BLAST]: {
         // ability name
@@ -3686,7 +3782,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 50
     },
     [ABILITIES.RUNE_FLAME]: {
         // ability name
@@ -3698,7 +3795,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 35
     },
     [ABILITIES.DEVOUR]: {
         // ability name
@@ -3710,7 +3808,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 50
     },
     [ABILITIES.REAP]: {
         // ability name
@@ -3722,7 +3821,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 45
     },
     [ABILITIES.SOULFIRE_INITIAL]: {
         // ability name
@@ -3751,7 +3851,7 @@ const abils = {
     [ABILITIES.SOULFIRE]: {
         // ability name
         'min hit': 0.45, // min % of abil expressed as a decimal
-        'var hit': 0.1,
+        'var hit': 0.1, 
         'on-hit effects': true, // does the ability get on-hit effects
         'crit effects': true, // can the ability crit
         'damage potential effects': true, // is the ability affected by damage potential
@@ -3768,7 +3868,7 @@ const abils = {
                 ABILITIES.SOULFIRE_BURN,
                 ABILITIES.SOULFIRE_BURN,
                 ABILITIES.SOULFIRE_BURN,
-            ]
+            ]//2509, 3840
         },
         hit_timings: [0, 3, 6, 9, 12, 15, 18],
         'adren cost': 35
@@ -3783,7 +3883,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 25
     },
     [ABILITIES.FROM_THE_SHADOWS_HIT]: {
         // ability name
@@ -3816,7 +3917,9 @@ const abils = {
                 ABILITIES.FROM_THE_SHADOWS_HIT,
                 ABILITIES.FROM_THE_SHADOWS_HIT
             ]
-        }
+        },
+        hit_timings: [2, 4, 6, 8, 10],
+        'adren cost': 50
     },
     [ABILITIES.FLAMES_OF_ZAMORAK]: {
         // ability name
@@ -3828,7 +3931,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 25
     },
     [ABILITIES.MIASMIC_BARRAGE]: {
         // ability name
@@ -3840,7 +3944,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'magic',
-        'damage type': 'magic'
+        'damage type': 'magic',
+        'adren cost': 50
     },
 
     [ABILITIES.NECRO_AUTO]: {
@@ -4220,7 +4325,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'necromancy',
-        'damage type': 'necrotic'
+        'damage type': 'necrotic',
+        'adren cost': 25
     },
     [ABILITIES.DEATH_ESSENCE]: {
         // ability name
@@ -4232,7 +4338,8 @@ const abils = {
         'ability classification': 'regular', // bleed, dot, burn, channel, regular, multihit
         'ability type': 'special attack', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'necromancy',
-        'damage type': 'necrotic'
+        'damage type': 'necrotic',
+        'adren cost': 30
     },
 
     [ABILITIES.RANGED_AUTO]: {
@@ -4481,7 +4588,76 @@ const abils = {
         'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
         'main style': 'ranged',
         'damage type': 'ranged',
-        hit_timings: [1, 3, 5, 7, 9], 
+        hits: {
+            1: [
+                ABILITIES.CORRUPTION_SHOT_HIT_1,
+                ABILITIES.CORRUPTION_SHOT_HIT_2,
+                ABILITIES.CORRUPTION_SHOT_HIT_3,
+                ABILITIES.CORRUPTION_SHOT_HIT_4,
+                ABILITIES.CORRUPTION_SHOT_HIT_5
+            ]
+        },
+        hit_timings: [1, 3, 5, 7, 9],
+    },
+    [ABILITIES.CORRUPTION_SHOT_HIT_1]: {
+        // ability name
+        'min hit': 0.6, // min % of abil expressed as a decimal
+        'var hit': 0.2,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'ranged',
+        'damage type': 'ranged',
+    },
+    [ABILITIES.CORRUPTION_SHOT_HIT_2]: {
+        // ability name
+        'min hit': 0.48, // min % of abil expressed as a decimal
+        'var hit': 0.16,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'ranged',
+        'damage type': 'ranged',
+    },
+    [ABILITIES.CORRUPTION_SHOT_HIT_3]: {
+        // ability name
+        'min hit': 0.384, // min % of abil expressed as a decimal
+        'var hit': 0.128,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'ranged',
+        'damage type': 'ranged',
+    },
+    [ABILITIES.CORRUPTION_SHOT_HIT_4]: {
+        // ability name
+        'min hit': 0.3072, // min % of abil expressed as a decimal
+        'var hit': 0.1024,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'ranged',
+        'damage type': 'ranged',
+    },
+    [ABILITIES.CORRUPTION_SHOT_HIT_5]: {
+        // ability name
+        'min hit': 0.24576, // min % of abil expressed as a decimal
+        'var hit': 0.08192,
+        'on-hit effects': false, // does the ability get on-hit effects
+        'crit effects': false, // can the ability crit
+        'damage potential effects': true, // is the ability affected by damage potential
+        'ability classification': 'dot', // bleed, dot, burn, channel, regular, multihit
+        'ability type': 'basic', // basic, threshold, special attack, ability (necromancy classification), ultimate
+        'main style': 'ranged',
+        'damage type': 'ranged',
     },
     [ABILITIES.SNAP_SHOT_1]: {
         // ability name

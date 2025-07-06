@@ -4,7 +4,7 @@ import { ABILITIES, abils } from '../const';
 import { on_cast, on_hit } from './damage_calc_new';
 import { DamageObject, DamageKind, DamageDistribution } from '../types';
 
-// Helper functions for accessing the new DamageObject structure
+// Helper functions
 function getDamageDistribution(dmgObject: DamageObject, kind: DamageKind): DamageDistribution | undefined {
     return dmgObject.distributions[kind];
 }
@@ -51,38 +51,46 @@ function calc_channelled_hit(settings: Record<string, any>, hit_index: number, r
  */
 function handle_buffs(settings: Record<string, any>, timers: Record<string, number>, abilityKey: string) {
     //TODO handle swiftness' weird damage calc + cleanup format
-    if (abilityKey == ABILITIES.SUNSHINE) {
-        settings[SETTINGS.SUNSHINE] = true;
-        timers[SETTINGS.SUNSHINE] = 50;
-    }
-    else if (abilityKey == ABILITIES.GREATER_SUNSHINE) {
-        settings[SETTINGS.SUNSHINE] = true;
-        timers[SETTINGS.SUNSHINE] = 63;
-    }
-    if (abilityKey == ABILITIES.DEATHS_SWIFTNESS) {
-        settings['death swiftness'] = true;
-        timers['death swiftness'] = 50;
-    }
-    else if (abilityKey == ABILITIES.GREATER_DEATHS_SWIFTNESS) {
-        settings['death swiftness'] = true;
-        timers['death swiftness'] = 63;
-    }
-    //TODO remove split soul on changing weapon
-    else if (abilityKey == ABILITIES.SPLIT_SOUL_ECB) {
-        settings['split soul'] = true; 
-        timers['split soul'] = 25;
-    }
-    else if (abilityKey == ABILITIES.BALANCE_BY_FORCE) {
-        settings[ABILITIES.BALANCE_BY_FORCE] = true; 
-        timers[ABILITIES.BALANCE_BY_FORCE] = 50;
-    }
-    else if ([ABILITIES.INCENDIARY_SHOT, ABILITIES.METEOR_STRIKE, ABILITIES.TSUNAMI].includes(abilityKey)) {
-        settings[SETTINGS.CRIT_BUFF] = true; 
-        timers[SETTINGS.CRIT_BUFF] = 50;
-    }
-    else if (abilityKey == ABILITIES.NATURAL_INSTINCT) {
-        settings[SETTINGS.NATURAL_INSTINCT] = true; 
-        timers[ABILITIES.NATURAL_INSTINCT] = 34;
+    switch (abilityKey) {
+        case ABILITIES.SUNSHINE:
+            settings[SETTINGS.SUNSHINE] = true;
+            timers[SETTINGS.SUNSHINE] = 50;
+            break;
+        case ABILITIES.GREATER_SUNSHINE:
+            settings[SETTINGS.SUNSHINE] = true;
+            timers[SETTINGS.SUNSHINE] = 63;
+            break;
+        case ABILITIES.DEATHS_SWIFTNESS:
+            settings['death swiftness'] = true;
+            timers['death swiftness'] = 50;
+            break;
+        case ABILITIES.GREATER_DEATHS_SWIFTNESS:
+            settings['death swiftness'] = true;
+            timers['death swiftness'] = 63;
+            break;
+        //TODO remove split soul on changing weapon
+        case ABILITIES.SPLIT_SOUL_ECB:
+            settings['split soul'] = true; 
+            timers['split soul'] = 25;
+            break;
+        case ABILITIES.BALANCE_BY_FORCE:
+            settings[ABILITIES.BALANCE_BY_FORCE] = true; 
+            timers[ABILITIES.BALANCE_BY_FORCE] = 50;
+            break;
+        case ABILITIES.INCENDIARY_SHOT:
+        case ABILITIES.METEOR_STRIKE:
+        case ABILITIES.TSUNAMI:
+            settings[SETTINGS.CRIT_BUFF] = true; 
+            timers[SETTINGS.CRIT_BUFF] = 50;
+            break;
+        case ABILITIES.NATURAL_INSTINCT:
+            settings[SETTINGS.NATURAL_INSTINCT] = true; 
+            timers[ABILITIES.NATURAL_INSTINCT] = 34;
+            break;
+        case ABILITIES.INSTABILITY:
+            settings[SETTINGS.INSTABILITY] = true; 
+            timers[SETTINGS.INSTABILITY] = 50;
+            break;
     }
 }
 

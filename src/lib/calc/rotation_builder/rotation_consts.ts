@@ -9,7 +9,8 @@ export const buffs = [
     SETTINGS.BERSERK, 
     SETTINGS.SPLIT_SOUL, 
 	SETTINGS.ICY_PRECISION, 
-    SETTINGS.BALANCE_BY_FORCE
+    SETTINGS.BALANCE_BY_FORCE,
+    SETTINGS.INSTABILITY
 ];
 
 export function createBuffTimings(barSize: number) {
@@ -62,6 +63,12 @@ export function createBuffTimings(barSize: number) {
                 idx: -1,
                 buffTicks: Array(barSize).fill(0),
                 colour: '#266d63'
+            },
+            [SETTINGS.INSTABILITY]: {
+                title: 'Instability',
+                idx: -1,
+                buffTicks: Array(barSize).fill(0),
+                colour: '#76ffbc'
             }
         }
     )
@@ -72,7 +79,6 @@ export function createStackTimings(barSize: number) {
         {
             [SETTINGS.ADRENALINE]: {
                 title: 'Adrenaline',
-                //displaySetting: SETTINGS.ADRENALINE,
                 displaySetting: SETTINGS.SHOW_ADRENALINE,
                 idx: -1,
                 image: '/effect_icons/Crit_buff.png',

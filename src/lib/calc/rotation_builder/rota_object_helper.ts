@@ -134,6 +134,11 @@ function calc_crit_chance(settings: Record<string, any>, abilityKey: string): nu
         if ([ABILITIES.SMOKE_TENDRILS_1, ABILITIES.SMOKE_TENDRILS_2, ABILITIES.SMOKE_TENDRILS_3, ABILITIES.SMOKE_TENDRILS_4].includes(abilityKey)) {
             crit_chance = 1;
         }
+
+        // Magma tempest
+        if (abilityKey === ABILITIES.MAGMA_TEMPEST) {
+            crit_chance = 0;
+        }
     }
 
     if (abils[abilityKey]['main style'] === 'melee') {
