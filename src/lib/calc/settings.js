@@ -579,6 +579,11 @@ const SETTINGS = {
         SUPERIOR_CRUELTY: 'superior scrimshaw of elements',
     },
     WEAPON: 'weapon type',
+    WEAPON_TYPE_MAGE: 'weapon type mage',
+    WEAPON_TYPE_MELEE: 'weapon type melee',
+    WEAPON_TYPE_RANGED: 'weapon type ranged',
+    WEAPON_TYPE_NECRO: 'weapon type necro',
+
     WEAPON_VALUES: {
         DW: 'main-hand',
         TH: 'two-hand'
@@ -1731,6 +1736,30 @@ const settingsConfig = {
             magic: SETTINGS.WEAPON_VALUES.TH,
             necromancy: SETTINGS.WEAPON_VALUES.DW
         },
+        options: [
+            { text: 'Dual wield', value: SETTINGS.WEAPON_VALUES.DW },
+            { text: 'Two handed', value: SETTINGS.WEAPON_VALUES.TH }
+        ]
+    },
+    [SETTINGS.WEAPON_TYPE_MAGE]: {
+        label: 'Weapon type',
+        default: SETTINGS.WEAPON_VALUES.TH,
+        options: [
+            { text: 'Dual wield', value: SETTINGS.WEAPON_VALUES.DW },
+            { text: 'Two handed', value: SETTINGS.WEAPON_VALUES.TH }
+        ]
+    },
+    [SETTINGS.WEAPON_TYPE_MELEE]: {
+        label: 'Weapon type',
+        default: SETTINGS.WEAPON_VALUES.DW,
+        options: [
+            { text: 'Dual wield', value: SETTINGS.WEAPON_VALUES.DW },
+            { text: 'Two handed', value: SETTINGS.WEAPON_VALUES.TH }
+        ]
+    },
+    [SETTINGS.WEAPON_TYPE_RANGED]: {
+        label: 'Weapon type',
+        default: SETTINGS.WEAPON_VALUES.TH,
         options: [
             { text: 'Dual wield', value: SETTINGS.WEAPON_VALUES.DW },
             { text: 'Two handed', value: SETTINGS.WEAPON_VALUES.TH }

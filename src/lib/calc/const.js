@@ -3744,7 +3744,9 @@ const abils = {
             4: [ABILITIES.TEMPEST_OF_ARMADYL_HIT_4],
             5: [ABILITIES.TEMPEST_OF_ARMADYL_HIT_5]
         },
-        hit_timings: [0, 1, 2, 3, 4]
+        hit_timings: [0, 1, 2, 3, 4],
+        duration: 5,
+        'adren cost': 50
     },
     [ABILITIES.INSTABILITY]: {
         // ability name

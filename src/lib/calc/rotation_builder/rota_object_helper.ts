@@ -1,5 +1,4 @@
 import { ABILITIES, abils, weapons, prayers } from '../const';
-import { on_cast, on_hit } from './damage_calc_new';
 import { SETTINGS } from '../settings';
 import { DamageObject, DamageKind, DamageDistribution } from '../types';
 
@@ -105,6 +104,27 @@ function calc_crit_chance(settings: Record<string, any>, abilityKey: string): nu
     }
 
     if (abils[abilityKey]['main style'] === 'magic') {
+        // tectonic armour
+        if (settings[SETTINGS.HELMET] === SETTINGS.MAGIC_HELMET_VALUES.TECTONIC) {
+            crit_chance += 0.01;
+        }
+        if (settings[SETTINGS.BODY] === SETTINGS.MAGIC_BODY_VALUES.TECTONIC) {
+            crit_chance += 0.01;
+        }
+        if (settings[SETTINGS.LEGS] === SETTINGS.MAGIC_LEGS_VALUES.TECTONIC) {
+            crit_chance += 0.01
+        }
+
+        // elite tectonic armour'
+        if (settings[SETTINGS.HELMET] === SETTINGS.MAGIC_HELMET_VALUES.ELITE_TECTONIC) {
+            crit_chance += 0.02;
+        }
+        if (settings[SETTINGS.BODY] === SETTINGS.MAGIC_BODY_VALUES.ELITE_TECTONIC) {
+            crit_chance += 0.02;
+        }
+        if (settings[SETTINGS.LEGS] === SETTINGS.MAGIC_LEGS_VALUES.ELITE_TECTONIC) {
+            crit_chance += 0.02;
+        }
         // channeller's ring
         if (
             (settings[SETTINGS.RING] === SETTINGS.RING_VALUES.CHANNELER || settings[SETTINGS.RING] === SETTINGS.RING_VALUES.CHANNELER_E) &&

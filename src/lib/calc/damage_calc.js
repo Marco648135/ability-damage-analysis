@@ -1720,6 +1720,7 @@ function style_specific_unification(settings, style = null) {
         settings[SETTINGS.GLOVES] = settings[SETTINGS.MAGIC_GLOVES];
         settings[SETTINGS.BOOTS] = settings[SETTINGS.MAGIC_BOOTS];
         settings[SETTINGS.PRAYER] = settings[SETTINGS.MAGIC_PRAYER];
+        settings[SETTINGS.WEAPON] = settings[SETTINGS.WEAPON_TYPE_MAGE];
     } else if (style == 'ranged' || abils[settings['ability']]['main style'] === 'ranged') {
         settings[SETTINGS.MH] = settings[SETTINGS.RANGED_MH];
         settings[SETTINGS.OH] = settings[SETTINGS.RANGED_OH];
@@ -1730,6 +1731,7 @@ function style_specific_unification(settings, style = null) {
         settings[SETTINGS.GLOVES] = settings[SETTINGS.RANGED_GLOVES];
         settings[SETTINGS.BOOTS] = settings[SETTINGS.RANGED_BOOTS];
         settings[SETTINGS.PRAYER] = settings[SETTINGS.RANGED_PRAYER];
+        settings[SETTINGS.WEAPON] = settings[SETTINGS.WEAPON_TYPE_RANGED];
     } else if (style == 'melee' || abils[settings['ability']]['main style'] === 'melee') {
         settings[SETTINGS.MH] = settings[SETTINGS.MELEE_MH];
         settings[SETTINGS.OH] = settings[SETTINGS.MELEE_OH];
@@ -1740,6 +1742,7 @@ function style_specific_unification(settings, style = null) {
         settings[SETTINGS.GLOVES] = settings[SETTINGS.MELEE_GLOVES];
         settings[SETTINGS.BOOTS] = settings[SETTINGS.MELEE_BOOTS];
         settings[SETTINGS.PRAYER] = settings[SETTINGS.MELEE_PRAYER];
+        settings[SETTINGS.WEAPON] = settings[SETTINGS.WEAPON_TYPE_MELEE];
     } else if (style == 'necromancy' || abils[settings['ability']]['main style'] === 'necromancy') {
         settings[SETTINGS.MH] = settings[SETTINGS.NECRO_MH];
         settings[SETTINGS.OH] = settings[SETTINGS.NECRO_OH];

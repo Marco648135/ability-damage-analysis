@@ -101,7 +101,11 @@
 		gameState.totalDamage = dmgResult[0];
 		gameState.poisonDamage = dmgResult[1];
 		gameState.familiarDamage = dmgResult[2];
-		console.log('New Impl Total Damage = ' + gameState.totalDamage + ' (Poison Damage = ' + gameState.poisonDamage + ')');
+		console.log(
+			'Total Damage = ' + gameState.totalDamage + 
+			' (Poison Damage = ' + gameState.poisonDamage + '; ' + 
+			'Familiar Damage = ' + gameState.familiarDamage + ')'
+		);
 	}
 		
 	//UI functions

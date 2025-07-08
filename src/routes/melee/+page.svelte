@@ -593,7 +593,7 @@
                             <div class="md:col-span-1 space-y-2">
                                 <h5 class="uppercase font-bold text-lg text-center">Weapons</h5>
                                 <Select
-                                    bind:setting={settings[SETTINGS.WEAPON]}
+                                    bind:setting={settings[SETTINGS.WEAPON_TYPE_MELEE]}
                                     onchange={() => updateDamages()}
                                     img="/armour_icons/Main_hand_slot.webp"
                                 />

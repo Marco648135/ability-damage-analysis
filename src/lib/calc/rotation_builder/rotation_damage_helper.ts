@@ -18,6 +18,15 @@ function iterateDistributions(dmgObject: DamageObject, callback: (distribution: 
     }
 }
 
+export function add_adrenaline(settings, amount: number) {
+    if (settings[SETTINGS.NATURAL_INSTINCT] && amount > 0) {
+        amount *= 2;
+    }
+    let new_adren = settings[SETTINGS.ADRENALINE] + amount;
+    const max_adren = settings[SETTINGS.HEIGHTENED_SENSES] ? 110 : 100; //TODO vestements
+    settings[SETTINGS.ADRENALINE] = (amount > 0) ? Math.min(max_adren, new_adren) : new_adren;
+}
+
 /**
  * Calculates the damage object for a single tick of a channelled ability
  * @param settings
@@ -114,7 +123,8 @@ function handle_edraco(settings: Record<string, any>, timers: Record<string, num
     function dracoBuff(startString: string, adrenGain: number, infusionTier: string) {
         let count = items.filter(item => item && item.startsWith(startString)).length;
         if (abilityKey == ABILITIES.RAPID_FIRE_LAST_HIT || abilityKey == ABILITIES.RAPID_FIRE_HIT) {
-            settings[SETTINGS.ADRENALINE] += count * adrenGain;
+            
+            add_adrenaline(settings, count * adrenGain);
         }
         //Handle crit chance buff
         if (abilityKey == ABILITIES.RAPID_FIRE_LAST_HIT) {

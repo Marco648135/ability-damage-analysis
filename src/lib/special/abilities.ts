@@ -6,9 +6,21 @@ export const offGcdAbilities = {
         title: 'Adrenaline renewal potion',
         icon: '/ability_icons/special/Adrenaline_renewal_potion.png'
     },
-    ["Add 100 Adrenaline"]: {
-        title: 'Add 100 Adrenaline',
-        icon: '/ability_icons/special/Adrenaline_renewal_potion.png'
+    ["Add 5 Adrenaline"]: {
+        title: 'Add 5 Adrenaline',
+        icon: '/ability_icons/special/Adrenaline_5.png'
+    },
+    ["Add 10 Adrenaline"]: {
+        title: 'Add 10 Adrenaline',
+        icon: '/ability_icons/special/Adrenaline_10.png'
+    },
+    ["Add 20 Adrenaline"]: {
+        title: 'Add 20 Adrenaline',
+        icon: '/ability_icons/special/Adrenaline_20.png'
+    },
+    ["Add 50 Adrenaline"]: {
+        title: 'Add 50 Adrenaline',
+        icon: '/ability_icons/special/Adrenaline_50.png'
     },
     [ABILITIES.INGENUITY_OF_THE_HUMANS]: {
         title: 'Ingenuity of the Humans',

@@ -8,7 +8,7 @@
     import GradientSeparator from '../UI/GradientSeparator.svelte';
     import { SETTINGS, settingsConfig } from '$lib/calc/settings';
     export let tab = 'general'; // Options as props
-    export let styleTab = 'magic';
+    export let styleTab = 'ranged';
     export let settings;
     export let stacks;
     export let updateDamages;
@@ -92,8 +92,22 @@
         
         
     }
-    makeNaked();
-    // testPreset();
+
+    function testPreset2() {
+        settings[SETTINGS.MAGIC_HELMET]['value'] = SETTINGS.MAGIC_HELMET_VALUES.TECTONIC;
+        settings[SETTINGS.MAGIC_BODY]['value'] = SETTINGS.MAGIC_BODY_VALUES.TECTONIC;
+        settings[SETTINGS.MAGIC_LEGS]['value'] = SETTINGS.MAGIC_LEGS_VALUES.TECTONIC;
+        settings[SETTINGS.MAGIC_GLOVES]['value'] = SETTINGS.MAGIC_GLOVES_VALUES.KWW;
+        settings[SETTINGS.MAGIC_BOOTS]['value'] = SETTINGS.MAGIC_BOOTS_VALUES.BLAST;
+
+        settings[SETTINGS.NECKLACE]['value'] = 'essence of finality amulet';
+        settings[SETTINGS.REAPER_CREW]['value'] = false;
+        settings[SETTINGS.AMMO]['value'] = 'wen arrows';//'none';
+        
+        
+    }
+    //makeNaked();
+    //testPreset2();
     //settings[SETTINGS.ICY_CHILL_STACKS].value = 10;
     updateDamages();
 
@@ -607,7 +621,7 @@
                     <h5 class="uppercase font-bold text-lg text-center mb-4">Weapons</h5>
                     {#if styleTab === 'ranged'}
                         <Select
-                            bind:setting={settings[SETTINGS.WEAPON]}
+                            bind:setting={settings[SETTINGS.WEAPON_TYPE_RANGED]}
                             onchange={() => updateDamages()}
                             img="/armour_icons/Main_hand_slot.webp"
                         />
@@ -663,56 +677,54 @@
                             img="/effect_icons/shard_of_genesis.png"
                         />
                     {:else if styleTab === 'magic'}
-
-                    <div class="md:col-span-1">
-                        <h5 class="uppercase font-bold text-lg text-center">Weapons</h5>
-                        <Select
-                            bind:setting={settings[SETTINGS.WEAPON]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Main_hand_slot.webp"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.MAGIC_MH]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Main_hand_slot.webp"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.MH_TIER_CUSTOM]}
-                            onchange={() => updateDamages()}
-                            max="100"
-                            step="1"
-                            min="0"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.MAGIC_OH]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Off-hand_slot.webp"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.OH_TIER_CUSTOM]}
-                            onchange={() => updateDamages()}
-                            max="100"
-                            step="1"
-                            min="0"
-                        />
-                        <Select
-                            bind:setting={settings[SETTINGS.MAGIC_TH]}
-                            onchange={() => updateDamages()}
-                            img="/armour_icons/Off-hand_slot.webp"
-                        />
-                        <Number
-                            bind:setting={settings[SETTINGS.TH_TIER_CUSTOM]}
-                            onchange={() => updateDamages()}
-                            max="100"
-                            step="1"
-                            min="0"
-                        />
-                        <Checkbox
-                            bind:setting={settings[SETTINGS.INNATE_MASTERY]}
-                            onchange={() => updateDamages()}
-                            img="/effect_icons/shard_of_genesis.png"
-                        />
-                    </div>
+                        <div class="md:col-span-1">
+                            <Select
+                                bind:setting={settings[SETTINGS.WEAPON_TYPE_MAGE]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Main_hand_slot.webp"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.MAGIC_MH]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Main_hand_slot.webp"
+                            />
+                            <Number
+                                bind:setting={settings[SETTINGS.MH_TIER_CUSTOM]}
+                                onchange={() => updateDamages()}
+                                max="100"
+                                step="1"
+                                min="0"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.MAGIC_OH]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Off-hand_slot.webp"
+                            />
+                            <Number
+                                bind:setting={settings[SETTINGS.OH_TIER_CUSTOM]}
+                                onchange={() => updateDamages()}
+                                max="100"
+                                step="1"
+                                min="0"
+                            />
+                            <Select
+                                bind:setting={settings[SETTINGS.MAGIC_TH]}
+                                onchange={() => updateDamages()}
+                                img="/armour_icons/Off-hand_slot.webp"
+                            />
+                            <Number
+                                bind:setting={settings[SETTINGS.TH_TIER_CUSTOM]}
+                                onchange={() => updateDamages()}
+                                max="100"
+                                step="1"
+                                min="0"
+                            />
+                            <Checkbox
+                                bind:setting={settings[SETTINGS.INNATE_MASTERY]}
+                                onchange={() => updateDamages()}
+                                img="/effect_icons/shard_of_genesis.png"
+                            />
+                        </div>
                     {:else if styleTab === 'melee'}
                     {:else if styleTab === 'necro'}
                     {/if}

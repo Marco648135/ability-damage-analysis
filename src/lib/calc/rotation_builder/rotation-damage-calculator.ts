@@ -294,8 +294,7 @@ function processBleedAbility(
 ) {
     let dmgObject = create_damage_object(settingsCopy, abilityKey);
     let dmgObjects = on_cast(settingsCopy, dmgObject, state.timers, abilityKey);
-    console.log('dmgObjects');
-    console.log(dmgObjects);
+
     let i = 0;
     dmgObjects.forEach(element => {
         let hits = on_hit(settingsCopy, element, state.timers, element.ability); // todo fix
@@ -398,7 +397,7 @@ function processQueuedDamage(tick: number, state: RotationState, settingsCopy: a
             const damageObjects = on_damage(settingsCopy, namedDmgObject);
             damageObjects.forEach(dmgObj => {
                 let dmg = get_user_value(settingsCopy, dmgObj);
-                state.dmgs.push(dmg * scale); // Scale damage by likelihood of hit occuring 
+                state.dmgs.push(Math.floor(dmg * scale)); // Scale damage by likelihood of hit occuring 
                 state.hitCount += scale;
 
             
@@ -467,8 +466,9 @@ function handleExtraActions(settings: any, timers: Record<string, number>, tick:
             if (element === "Adrenaline renewal potion") {
                 timers[element] = 10;
             }
-            if (element === "Add 100 Adrenaline") {
-                settings[SETTINGS.ADRENALINE] += 100;
+            else if (element.includes("Adrenaline")) {
+                const amount = parseInt(element.split(" ")[1]);
+                settings[SETTINGS.ADRENALINE] += amount;
             }
         }
         // Handle gear swaps

@@ -5,7 +5,7 @@ import { SETTINGS } from '../settings';
 import { calc_crit_damage, get_hit_sequence, add_split_soul, calc_split_soul_hit } from '../damage_calc';
 import { handle_sgb, handle_wen_buff } from './rotation_damage_helper'
 import { DamageObject, DamageKind, DamageDistribution } from '../types';
-import { c } from 'vite/dist/node/types.d-aGj9QkWt';
+import { add_adrenaline } from './rotation_damage_helper';
 
 // Helper functions for accessing the new DamageObject structure
 function getDamageDistribution(dmgObject: DamageObject, kind: DamageKind): DamageDistribution | undefined {
@@ -29,14 +29,7 @@ function iterateDistributions(dmgObject: DamageObject, callback: (distribution: 
 }
 
 //TODO move this AND make edraco adren use it
-function add_adrenaline(settings, amount: number) {
-    if (settings[SETTINGS.NATURAL_INSTINCT] && amount > 0) {
-        amount *= 2;
-    }
-    let new_adren = settings[SETTINGS.ADRENALINE] + amount;
-    const max_adren = settings[SETTINGS.HEIGHTENED_SENSES] ? 110 : 100; //TODO vestements
-    settings[SETTINGS.ADRENALINE] = (amount > 0) ? Math.min(max_adren, new_adren) : new_adren;
-}
+
 // These are the things that happen before an ability is released - 
 // adrenaline and cooldowns before on_cast is called.
 // This is at the same time, except when an ability is stalled.
@@ -82,14 +75,16 @@ function on_cast(settings, dmgObject: DamageObject, timers: Record<string, numbe
     });
     
     //TODO fix - there's gotta be a better way to handle abilities which don't consume wen buff...
-    if (settings[SETTINGS.AMMO] === SETTINGS.AMMO_VALUES.WEN_ARROWS &&
-        ['threshold', 'special attack', 'ultimate'].includes(abils[abilityKey]['ability type']) &&
-        settings[SETTINGS.WEAPON] === SETTINGS.WEAPON_VALUES.TH &&
-        (!timers[SETTINGS.ICY_PRECISION] || timers[SETTINGS.ICY_PRECISION] < 0) &&
-        ![ABILITIES.GREATER_DEATHS_SWIFTNESS, ABILITIES.SPLIT_SOUL_ECB, 
-            ABILITIES.DEATHS_SWIFTNESS_DOT, ABILITIES.DEATHS_SWIFTNESS].includes(abilityKey)
-    ) {
-            handle_wen_buff(settings, timers);
+    if (abils[abilityKey]['main style'] === 'ranged') {
+        if (settings[SETTINGS.AMMO] === SETTINGS.AMMO_VALUES.WEN_ARROWS &&
+            ['threshold', 'special attack', 'ultimate'].includes(abils[abilityKey]['ability type']) &&
+            settings[SETTINGS.WEAPON] === SETTINGS.WEAPON_VALUES.TH &&
+            (!timers[SETTINGS.ICY_PRECISION] || timers[SETTINGS.ICY_PRECISION] < 0) &&
+            ![ABILITIES.GREATER_DEATHS_SWIFTNESS, ABILITIES.SPLIT_SOUL_ECB, 
+                ABILITIES.DEATHS_SWIFTNESS_DOT, ABILITIES.DEATHS_SWIFTNESS].includes(abilityKey)
+        ) {
+                handle_wen_buff(settings, timers);
+        }
     }
     // Marco - turn off hit chance stuff here (idt anything exists)
     // TODO - ingenuity of the humans, and check if accuracy penalty from wrong style gear is implemented
@@ -841,6 +836,7 @@ function on_hit(settings, dmgObject: DamageObject, timers: Record<string, number
     }
     if (settings[SETTINGS.AMMO] === SETTINGS.AMMO_VALUES.WEN_ARROWS &&
         abils[abilityKey]['ability type'] == 'basic' &&
+        abils[abilityKey]['main style'] === 'ranged' &&
         settings[SETTINGS.WEAPON] === SETTINGS.WEAPON_VALUES.TH
     ) {
             settings[SETTINGS.ICY_CHILL_STACKS] = Math.min(settings[SETTINGS.ICY_CHILL_STACKS]+1, 15);
@@ -906,8 +902,14 @@ function on_hit(settings, dmgObject: DamageObject, timers: Record<string, number
             && settings[SETTINGS.INSTABILITY] === true 
             && abils[abilityKey]['damage type'] === 'magic' 
             && abilityKey != 'time strike') {
-                settings['fsoa damage'] = structuredClone(dmgObject);
-            //TODO bolg treatment
+                
+                let fsoaDmgObject = create_damage_object(settings, ABILITIES.TIME_STRIKE);
+                fsoaDmgObject.likelihood = dmgObject.distributions.crit.probability || 0;
+                fsoaDmgObject = on_cast(settings, fsoaDmgObject, timers, ABILITIES.TIME_STRIKE)[0]; //TODO remove [0]
+                let fsoaDmgObjects = on_hit(settings, fsoaDmgObject, timers, ABILITIES.TIME_STRIKE);
+                dmgObjects.push(...fsoaDmgObjects);
+                //TODO finish
+                //dmgObjects.push(fsoaDmgObject);
         }
 
         // store bloat damages
