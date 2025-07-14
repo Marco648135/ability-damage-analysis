@@ -130,7 +130,7 @@ function processCurrentTick(state: RotationState, gameState: GameState, settings
         const hit_tick = state.tick + state.hit_delay;
         state.damageQueue[hit_tick] ??= [];
         handle_buffs(settingsCopy, state.timers, stalledAbility);
-
+        console.log(state.timers);
         if (stalledAbility in allAbilities) {
             processStalledAbility(state, settingsCopy, stalledAbility, hit_tick); //TODO fix / remove
         }
@@ -205,7 +205,7 @@ function processAbility(
             processSingleHitAbility(state, settingsCopy, abilityKey, hit_tick);
         } else if (isChannelled(settingsCopy, abilityKey)) {
             // Handled in processAbilityTicks
-        } else if (abils[abilityKey]['ability classification'] === 'multihit') {
+        } else if (allAbilities[abilityKey]['ability classification'] === 'multihit') {
             processMultiHitAbility(state, settingsCopy, abilityKey, hit_tick);
         } else {
             processBleedAbility(state, settingsCopy, abilityKey, hit_tick);
@@ -221,7 +221,7 @@ function processStalledAbility(
     abilityKey: string, 
     hit_tick: number
 ) {
-    if (rangedAbils[abilityKey].calc == hit_damage_calculation) {
+    if (allAbilities[abilityKey].calc == hit_damage_calculation) {
         processSingleHitAbility(state, settingsCopy, abilityKey, hit_tick);
     } else if (isChannelled(settingsCopy, abilityKey)) {
         // Handled in processAbilityTicks

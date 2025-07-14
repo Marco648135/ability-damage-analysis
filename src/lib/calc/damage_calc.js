@@ -1,6 +1,6 @@
 import { next_cast, next_hit, next_tick } from './ability_helper';
 import { ABILITIES, abils, armour, gear, prayers, weapons } from './const';
-import { create_object } from './object_helper';
+import { create_object } from './object_helper.js';
 import { SETTINGS } from './settings';
 
 function calc_base_ad(settings) {
@@ -129,6 +129,7 @@ function calc_base_ad(settings) {
     }
 
     return base_AD;
+
 }
 
 function calc_weapon_tier(settings, hand) {
@@ -832,7 +833,6 @@ function calc_additive_boosts(settings, dmgObject) {
 		boost += 0.1;
 		boost = boost + 0.01 * settings['desperado'];
 	}*/
-
     dmgObject['min hit'] = Math.floor(dmgObject['min hit'] * (1 + boost));
     dmgObject['var hit'] = Math.floor(dmgObject['var hit'] * (1 + boost));
 
@@ -1399,15 +1399,20 @@ function roll_damage(settings, dmgObject, key) {
 function calc_on_hit(settings, dmgObject) {
     dmgObject = calc_precise(settings, dmgObject);
     dmgObject = calc_additive_boosts(settings, dmgObject);
-    dmgObject = calc_multiplicative_shared_buffs(settings, dmgObject);
+    // dmgObject = calc_multiplicative_shared_buffs(settings, dmgObject);
     
-    dmgObject = calc_multiplicative_pve_buffs(settings, dmgObject);
-    dmgObject = calc_bonus_damage(settings, dmgObject);
+    // dmgObject = calc_multiplicative_pve_buffs(settings, dmgObject);
+    // dmgObject = calc_bonus_damage(settings, dmgObject);
     return dmgObject;
 }
 
 function calc_damage_object(settings) {
     const dmgObject = create_object(settings);
+    
+    if (settings['ability'] === ABILITIES.DAZING_SHOT) {
+        console.log('Dazing shot')
+    }
+
     for (let key in dmgObject) {
         // calc base AD
         dmgObject[key]['base AD'] = calc_base_ad(settings);
@@ -1440,6 +1445,9 @@ function calc_damage_object(settings) {
             )
         ) {
             dmgObject[key] = add_split_soul(settings, dmgObject[key]);
+        }
+        if (settings['ability'] === ABILITIES.DAZING_SHOT) {
+            console.log(dmgObject);
         }
     }
     // get user value
@@ -1762,7 +1770,7 @@ function style_specific_unification(settings, style = null) {
 function hit_damage_calculation(settings, rotationCalc = false) {
     settings = style_specific_unification(settings); // initialise some settings
     let total_damage = calc_damage_object(settings); // calculate the ability
-    total_damage = apply_additional(settings, total_damage, rotationCalc);
+    //total_damage = apply_additional(settings, total_damage, rotationCalc);
     //TODO add next cast next hit next tick etc
     return total_damage;
 }

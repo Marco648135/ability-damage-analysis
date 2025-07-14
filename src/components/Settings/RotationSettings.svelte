@@ -2,8 +2,6 @@
     import Checkbox from '../../components/Settings/Checkbox.svelte';
     import Number from '../../components/Settings/Number.svelte';
     import Select from '../../components/Settings/Select.svelte';
-    import Header from '$components/Layout/Header.svelte';
-    import Navbar from '$components/Layout/Navbar.svelte';
     import TabButton from '../UI/TabButton.svelte';
     import GradientSeparator from '../UI/GradientSeparator.svelte';
     import { SETTINGS, settingsConfig } from '$lib/calc/settings';
@@ -89,10 +87,16 @@
         settings[SETTINGS.RANGED_PRAYER]['value'] = 'anguish';
         settings[SETTINGS.SMOKE_CLOUD]['value'] = false;
         settings[SETTINGS.AMMO]['value'] = 'wen arrows';//'none';
-        
-        
     }
 
+    function testPresetR() {
+        settings[SETTINGS.NECKLACE]['value'] = 'essence of finality amulet';
+
+        //settings[SETTINGS.RANGED_LEVEL]['value'] = 99;
+        settings[SETTINGS.REAPER_CREW]['value'] = false;
+        settings[SETTINGS.RING]['value'] = SETTINGS.RING_VALUES.STALKER_E;
+        settings[SETTINGS.AMMO]['value'] = 'wen arrows';//'none';
+    }
     function testPreset2() {
         settings[SETTINGS.MAGIC_HELMET]['value'] = SETTINGS.MAGIC_HELMET_VALUES.TECTONIC;
         settings[SETTINGS.MAGIC_BODY]['value'] = SETTINGS.MAGIC_BODY_VALUES.TECTONIC;
@@ -107,7 +111,7 @@
         
     }
     //makeNaked();
-    //testPreset2();
+    testPresetR();
     //settings[SETTINGS.ICY_CHILL_STACKS].value = 10;
     updateDamages();
 
@@ -345,6 +349,7 @@
                             onchange={() => updateDamages()}
                         />
                     {/each}
+                    {#if styleTab === 'ranged'}
                     <Number
                         bind:setting={settings[SETTINGS.PERFECT_EQUILIBRIUM_STACKS]}
                         onchange={() => updateDamages()}
@@ -361,6 +366,24 @@
                         min="0"
                         img="/effect_icons/Icy_Chill.png"
                     />
+                    {:else if styleTab === 'magic'}
+                        <Number
+                            bind:setting={settings[SETTINGS.BLOOD_TITHE]}
+                            onchange={() => updateDamages()}
+                            img="/effect_icons/blood_tithe.png"
+                            step="1"
+                            max="12"
+                            min="0"
+                        />
+                        <Number
+                            bind:setting={settings[SETTINGS.ESSENCE_CORRUPTION]}
+                            onchange={() => updateDamages()}
+                            img="/effect_icons/essence_corruption.png"
+                            step="1"
+                            max="100"
+                            min="0"
+                        />
+                    {/if}
                 </div>
                 <div class="md:col-span-1" space-y-2>
                     <h5 class="uppercase font-bold text-lg text-center mb-4">Adrenaline</h5>

@@ -5290,6 +5290,7 @@ const abils = {
         hits: {
             1: [ABILITIES.DESTRUCTIVE_SHOT_HIT, 'next hit', ABILITIES.DESTRUCTIVE_SHOT_HIT]
         },
+        hit_timings: [1,1], //todo actual hit timings 
         'adren cost': 40
     },
     [ABILITIES.DEFIANCE]: {

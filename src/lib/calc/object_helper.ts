@@ -211,4 +211,4 @@ function calc_crit_chance(settings: Record<string, any>): number {
     return Math.min(1, crit_chance);
 }
 
-export { calc_crit_chance, create_object }; 
+export { create_object }; 

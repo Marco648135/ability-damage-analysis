@@ -66,8 +66,8 @@ function on_stall(settings, abilityKey: string) {
 function on_cast(settings, dmgObject: DamageObject, timers: Record<string, number>, abilityKey: string): DamageObject[] {
     // This function happens as an ability is cast
     // scale to hit chance / damage potential
-    console.log('BASE AD');
-    console.log(settings[SETTINGS.ABILITY_DAMAGE]);
+    // console.log('BASE AD');
+    // console.log(settings[SETTINGS.ABILITY_DAMAGE]);
     const dmgObjects = [];
     iterateDistributions(dmgObject, (distribution) => {
         distribution['boosted AD'] = Math.floor(settings[SETTINGS.ABILITY_DAMAGE] * 
@@ -337,7 +337,7 @@ function on_cast(settings, dmgObject: DamageObject, timers: Record<string, numbe
             const hitAbility = abils[abilityKey]['hits'][1][i];
             clone.ability = hitAbility;
             if (clone.ability === ABILITIES.SOULFIRE_INITIAL) {
-                console.log('soulfire initial');
+                // console.log('soulfire initial');
                 iterateDistributions(clone, (distribution) => {
                     distribution['boosted AD'] = preability_AD;
                 });
@@ -355,10 +355,6 @@ function on_cast(settings, dmgObject: DamageObject, timers: Record<string, numbe
         set_min_var(settings, dmgObject);
     });
     return dmgObjects;
-    dmgObjects.forEach(dmgObject => {
-        console.log('dmgObject');
-        console.log(dmgObject);
-    });
 }
 
 function on_hit(settings, dmgObject: DamageObject, timers: Record<string, number>, abilityKey: string): DamageObject[] {

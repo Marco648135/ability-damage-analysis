@@ -23,7 +23,7 @@
             baseString = style + ' ';
         }
         const slotKey =  baseString + slot;
-        console.log('Slot key!!!! = ' + slotKey);
+        // console.log('Slot key!!!! = ' + slotKey);
         const item = settings[slotKey].value;
         return iconPath + item + png; 
     }
