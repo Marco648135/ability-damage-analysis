@@ -256,6 +256,38 @@ const gear = {
 };
 
 const armour = {
+    'tokkul-zo': {
+        'necromancy strength': 2.4,
+        'magic strength': 2.4,
+        'melee strength': 2.4,
+        'ranged strength': 2.4,
+        slot: 'ring',
+        style: 'hybrid'
+    },
+    'warpriest of tuska gauntlets': {
+        'necromancy strength': 0,
+        'magic strength': 0,
+        'melee strength': 0,
+        'ranged strength': 0,
+        slot: 'gloves',
+        style: 'hybrid'
+    },
+    'warpriest of tuska boots': {
+        'necromancy strength': 0,
+        'magic strength': 0,
+        'melee strength': 0,
+        'ranged strength': 0,
+        slot: 'boots',
+        style: 'hybrid'
+    },
+    'warpriest of tuska cape': {
+        'necromancy strength': 0,
+        'magic strength': 0,
+        'melee strength': 0,
+        'ranged strength': 0,
+        slot: 'cape',
+        style: 'hybrid'
+    },
     'sirenic mask': {
         'necromancy strength': 0,
         'magic strength': 0,

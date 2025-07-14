@@ -280,6 +280,7 @@ const SETTINGS = {
         KWW: 'kerapacs wristwraps',
         KWW_E: 'enhanced kerapacs wristwraps',
         MASTERWORK: 'masterwork magic gloves',
+        TUSKA: 'warpriest of tuska gauntlets',
     },
     RANGED_GLOVES: 'ranged gloves',
     RANGED_GLOVES_VALUES: {
@@ -317,6 +318,7 @@ const SETTINGS = {
         BLAST_E: 'enhanced blast diffusion boots',
         SH: 'silverhawk boots',
         MASTERWORK: 'masterwork magic boots',
+        TUSKA: 'warpriest of tuska boots'
     },
     RANGED_BOOTS: 'ranged boots',
     RANGED_BOOTS_VALUES: {
@@ -367,7 +369,8 @@ const SETTINGS = {
         GOD: 'god cape',
         MAX: 'max cape',
         SKILL: 'skill cape',
-        GHOST_HUNTER: 'ghost hunter backpack'
+        GHOST_HUNTER: 'ghost hunter backpack',
+        TUSKA: 'warpriest of tuska cape',
     },
     RING: 'ring',
     RING_VALUES: {
@@ -388,6 +391,7 @@ const SETTINGS = {
         LOTD_I: 'luck of the dwarves (i)',
         HSR: 'hazelmeres signet ring',
         HSR_I: 'hazelmeres signet ring (i)',
+        TOKKUL: 'tokkul-zo',
     },
     /*
     MAGIC_RING: 'magic ring',
@@ -1339,6 +1343,7 @@ const settingsConfig = {
             { text: 'Kerrywaps', value: SETTINGS.MAGIC_GLOVES_VALUES.KWW },
             { text: 'Kerrywaps+', value: SETTINGS.MAGIC_GLOVES_VALUES.KWW_E },
             { text: 'Masterwork', value: SETTINGS.MAGIC_GLOVES_VALUES.MASTERWORK },
+            { text: 'Tuska', value: SETTINGS.MAGIC_GLOVES_VALUES.TUSKA },
         ]
     },
     [SETTINGS.RANGED_GLOVES]: {
@@ -1386,6 +1391,7 @@ const settingsConfig = {
             { text: 'Blast diff', value: SETTINGS.MAGIC_BOOTS_VALUES.BLAST },
             { text: 'Blast diff+', value: SETTINGS.MAGIC_BOOTS_VALUES.BLAST_E },
             { text: 'Masterwork', value: SETTINGS.MAGIC_BOOTS_VALUES.MASTERWORK },
+            { text: 'Tuska', value: SETTINGS.MAGIC_BOOTS_VALUES.TUSKA },
             { text: 'Silverhawks', value: SETTINGS.MAGIC_BOOTS_VALUES.SH },
         ]
     },
@@ -1451,6 +1457,7 @@ const settingsConfig = {
             { text: 'Zuk', value: SETTINGS.CAPE_VALUES.ZUK },
             { text: 'Comp cape', value: SETTINGS.CAPE_VALUES.COMP },
             { text: 'Ghost hunter', value: SETTINGS.CAPE_VALUES.GHOST_HUNTER},
+            { text: 'Tuska', value: SETTINGS.CAPE_VALUES.TUSKA},
         ]
     },
     [SETTINGS.RING]: {
@@ -1474,6 +1481,7 @@ const settingsConfig = {
             { text: 'LOTD (i)', value: SETTINGS.RING_VALUES.LOTD_I },
             { text: 'HSR', value: SETTINGS.RING_VALUES.HSR },
             { text: 'HSR (i)', value: SETTINGS.RING_VALUES.HSR_I },
+            { text: 'Tokkul-Zo', value: SETTINGS.RING_VALUES.TOKKUL },
         ]
     },
     /*
